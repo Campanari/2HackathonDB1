@@ -25,13 +25,13 @@ SensorTemperatura* sensorTemperatura;
 void setup(void) {
 
   Serial.begin(9600);
-  
+
   led = new Led(LED_PORT);
   led->registrar();
 
   sensorProximidade = new SensorProximidade(SENSOR_P_TRIGGER_PORT, SENSOR_P_ECHO_PORT);
   sensorProximidade->registrar();
-  
+
   sensorUmidadeSolo = new SensorUmidadeSolo(SENSOR_U_S_PORT, SENSOR_U_S_SWITCH_PORT);
   sensorUmidadeSolo->registrar();
 
@@ -49,7 +49,7 @@ void loop(void) {
   int recebido = receberDados();
 
   int distancia = sensorProximidade->ler();
-  
+
   if (distancia < 50) {
     led->ligar();
   } else {
@@ -66,15 +66,15 @@ void loop(void) {
   int estaChovendo = sensorChuva->ler();
   Serial.print("Sensor chuva: ");
   Serial.println(estaChovendo);
-  
+
   int luminosidade = sensorLuminosidade->ler();
   Serial.print("Sensor luminosidade: ");
   Serial.println(luminosidade);
-  
+
   float temperatura = sensorTemperatura->ler();
   Serial.print("Sensor temperatura: ");
   Serial.println(temperatura);
-  
+
   delay(1000);
 }
 
