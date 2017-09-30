@@ -6,8 +6,8 @@
 #define SENSOR_P_TRIGGER_PORT 4
 #define SENSOR_P_ECHO_PORT 5
 #define SENSOR_U_S_PORT 6
-#define SENSOR_U_S_PORT 6
-#define SENSOR_U_S_PORT 6
+#define SENSOR_U_S_SWITCH_PORT 6
+#define SENSOR_U_S_PORT A0
 
 Led* led;
 SensorProximidade* sensorProximidade;
@@ -23,7 +23,7 @@ void setup(void) {
   sensorProximidade = new SensorProximidade(SENSOR_P_TRIGGER_PORT, SENSOR_P_ECHO_PORT);
   sensorProximidade->registrar();
   
-  sensorUmidadeSolo = new SensorUmidadeSolo(SENSOR_U_S_PORT);
+  sensorUmidadeSolo = new SensorUmidadeSolo(SENSOR_U_S_PORT, SENSOR_U_S_SWITCH_PORT);
   sensorUmidadeSolo->registrar();
 }
 
