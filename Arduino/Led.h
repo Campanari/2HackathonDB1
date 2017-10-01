@@ -7,4 +7,5 @@ class Led {
 
     private:
         int _port;
+        bool _ligado;
 };

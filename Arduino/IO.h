@@ -1,9 +1,8 @@
-#include <SoftwareSerial.h>
 #include "Sensores.h"
 
 class IO {
 public:
-    IO(int inPort, int outPort);
+    IO();
     void registrar();
     bool disponivel();
     void enviar(Sensores sensor, int dados);
@@ -13,5 +12,4 @@ public:
 private:
     int _inPort;
     int _outPort;
-    SoftwareSerial* _serial;
 };

@@ -2,7 +2,8 @@
 #include "Led.h"
 
 Led::Led(int port) {
-    this->_port = port;
+    _port = port;
+    _ligado = false;
 };
 
 void Led::registrar() {
@@ -10,13 +11,21 @@ void Led::registrar() {
 }
 
 void Led::ligar() {
+    if (_ligado) {
+        return;
+    }
+
     digitalWrite(_port, HIGH);
 
-    Serial.println("ligado");
+    _ligado = true;
 }
 
 void Led::desligar() {
+    if (!_ligado) {
+        return;
+    }
+    
     digitalWrite(_port, LOW);
 
-    Serial.println("desligado");
+    _ligado = false;
 }

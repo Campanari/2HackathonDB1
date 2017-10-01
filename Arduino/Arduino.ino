@@ -47,7 +47,7 @@ void setup(void) {
   sensorTemperatura = new SensorTemperatura(SENSOR_T_PORT);
   sensorTemperatura->registrar();
 
-  io = new IO(10, 11);
+  io = new IO();
 }
 
 void loop(void) {
