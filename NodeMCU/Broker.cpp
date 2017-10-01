@@ -3,12 +3,14 @@
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length);
 
-Broker::Broker(const char* mqtt,uint16_t port) {
+Broker::Broker(WiFiClient client, const char* mqtt,uint16_t port) {
   _mqtt = mqtt;
   _port = port;
 
-  WiFiClient cliente;
-  _client = new PubSubClient(cliente);
+  _client = new PubSubClient(client);
+
+  Serial.println(_mqtt);
+  Serial.println(_port);
 
   _client->setServer(_mqtt, _port);
   _client->setCallback(mqtt_callback); 
@@ -16,20 +18,33 @@ Broker::Broker(const char* mqtt,uint16_t port) {
 
 void Broker::conectar(const char* id, const char* topico) {
   while (!conectado()) {
+      Serial.println("Não conectado ao Broker");
+    
+      Serial.println(id);
+          
       if (_client->connect(id)) {
+          Serial.println("Conectado ao Broker");
+          Serial.println(topico);
+          
           _client->subscribe(topico); 
+
+          Serial.println("Tópico OK");
       } else {
           delay(2000);
       }
   }
+
+  Serial.println("Conectado ao Broker");
 }
 
 bool Broker::conectado() {
   return _client->connected();
 }
 
-void Broker::enviar(char* topico, char* dados) {
+void Broker::enviar(const char* topico, const char* dados) {
   _client->publish(topico, dados);
+
+  Serial.println("Enviado");
 
   delay(1000);
 }

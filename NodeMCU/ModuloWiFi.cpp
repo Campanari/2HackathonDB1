@@ -17,6 +17,9 @@ void ModuloWifi::conectar() {
     {
         delay(100);
     }
+
+    Serial.println("Conectado");
+    Serial.println(WiFi.localIP());
 }
 
 void ModuloWifi::desconectar() {

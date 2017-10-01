@@ -1,11 +1,12 @@
+#include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
 class Broker {
   public:
-    Broker(const char* mqtt, uint16_t port);
+    Broker(WiFiClient client, const char* mqtt, uint16_t port);
     void conectar(const char* id, const char* topico);
     bool conectado();
-    void enviar(char* topico, char* dados);
+    void enviar(const char* topico, const char* dados);
     void receber();
     void loop();
 
