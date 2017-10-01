@@ -41,7 +41,8 @@ bool Broker::conectado() {
 void Broker::enviar(const char* topico, const char* dados) {
   _client->publish(topico, dados);
 
-  Serial.println("Enviado");
+  Serial.print("Enviado: ");
+  Serial.println(dados);
 
   delay(1000);
 }

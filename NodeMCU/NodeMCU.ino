@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include "ModuloWifi.h"
 #include "Broker.h"
+#include "IO.h"
 
 #define LED_PORT LED_BUILTIN
 #define SSID "DB1TALK"
@@ -8,15 +9,22 @@
 
 #define BROKER_MQTT "iot.eclipse.org"
 #define BROKER_PORT 1883
-#define TOPICO_SUBSCRIBE "AirdDUDV_S"
-#define TOPICO_PUBLISH "AirdDUDV_P"
-#define ID_MQTT "AirdDUDV"
+#define TOPICO_SUBSCRIBE "comandos"
+#define TOPICO_PUBLISH "consultas"
+#define COMANDO_DASHBOARD "DASHBOARD"
+#define COMANDO_PLANTA "PLANTA"
+#define COMANDO_ABASTECIMENTO "ABASTECIMENTO"
+#define COMANDO_ABRIR "ABRIR"
+#define COMANDO_FECHAR "FECHAR"
+#define COMANDO_AGUAR "AGUAR"
+#define ID_MQTT "AirDUDV"
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length);
 
 ModuloWifi* wifi;
 WiFiClient client;
 Broker broker(client, BROKER_MQTT, BROKER_PORT);
+IO* io;
 
 void setup()
 {
@@ -26,6 +34,8 @@ void setup()
   wifi->conectar();
 
   broker.getClient()->setCallback(mqtt_callback);
+
+  io = new IO();
 }
 
 //Função: envia ao Broker o estado atual do output
@@ -43,23 +53,35 @@ void setup()
 //    delay(1000);
 //}
 
+String executarComando;
+
 void loop()
 {
   wifi->conectar();
 
-  broker.conectar(ID_MQTT, TOPICO_SUBSCRIBE);
-
-  Serial.println("sajhgh");
-
-  if (!broker.conectado()) {
-    Serial.println("sajhgh2");
+  if (executarComando == COMANDO_DASHBOARD) {
     
-    broker.conectar(ID_MQTT, TOPICO_SUBSCRIBE);
+  } else if (executarComando == COMANDO_PLANTA) {
+    executarComando = "";
+
+    Planta planta = io->obterPlanta(1);
+
+    if (!broker.conectado()) {
+      broker.conectar(ID_MQTT, TOPICO_SUBSCRIBE);
+    }
+  
+    Serial.println("sajhgh3");
+  
+    broker.enviar(TOPICO_PUBLISH, planta.retorno);
+  } else if (executarComando == COMANDO_ABASTECIMENTO) {
+    
+  } else if (executarComando == COMANDO_AGUAR) {
+    
+  } else if (executarComando == COMANDO_FECHAR) {
+    
+  } else if (executarComando == COMANDO_ABRIR) {
+    
   }
-
-  Serial.println("sajhgh3");
-
-  broker.enviar(TOPICO_PUBLISH, "SAMIR VIADO");
 
   broker.loop();
 
@@ -67,14 +89,13 @@ void loop()
 }
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
-  String msg;
+  String comando;
 
-  //obtem a string do payload recebido
-  for(int i = 0; i < length; i++) 
-  {
-    char c = (char)payload[i];
-    msg += c;
+  for (int i = 0; i < length; i++) {
+    comando += (char)payload[i];
   }
 
-  Serial.println(msg);
+  Serial.println(comando);
+
+  executarComando = comando;
 }
