@@ -3,7 +3,7 @@
 class SensorTemperatura {
 public:
     SensorTemperatura(int port);
-    registrar();
+    void registrar();
     int ler();
 
 private:

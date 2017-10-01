@@ -1,19 +1,21 @@
 #include "Led.h"
+#include "Sensores.h"
 #include "SensorProximidade.h"
 #include "SensorUmidadeSolo.h"
 #include "SensorChuva.h"
 #include "SensorLuminosidade.h"
 #include "SensorTemperatura.h"
+#include "IO.h"
 
-#define LED_PORT 13
+#define LED_PORT 12
 #define SENSOR_P_TRIGGER_PORT 4
 #define SENSOR_P_ECHO_PORT 5
 #define SENSOR_U_S_PORT 6
 #define SENSOR_U_S_SWITCH_PORT 6
 #define SENSOR_U_S_PORT A0
 #define SENSOR_C_PORT 8
-#define SENSOR_L_PORT A2
-#define SENSOR_T_PORT A1
+#define SENSOR_L_PORT 2
+#define SENSOR_T_PORT 3
 
 Led* led;
 SensorProximidade* sensorProximidade;
@@ -21,10 +23,11 @@ SensorUmidadeSolo* sensorUmidadeSolo;
 SensorChuva* sensorChuva;
 SensorLuminosidade* sensorLuminosidade;
 SensorTemperatura* sensorTemperatura;
+IO* io;
 
 void setup(void) {
-
-  Serial.begin(9600);
+  
+  Serial.begin(115200);
 
   led = new Led(LED_PORT);
   led->registrar();
@@ -43,45 +46,66 @@ void setup(void) {
 
   sensorTemperatura = new SensorTemperatura(SENSOR_T_PORT);
   sensorTemperatura->registrar();
+
+  io = new IO(10, 11);
 }
 
 void loop(void) {
-  int recebido = receberDados();
+  led->desligar();
 
-  int distancia = sensorProximidade->ler();
+  if (io->disponivel()) {    
+    Sensores sensor = io->receber();
 
-  if (distancia < 50) {
-    led->ligar();
-  } else {
-    led->desligar();
+    if ((sensor & Sensores::Chuva) == Sensores::Chuva) {
+      bool estaChovendo = sensorChuva->ler();
+      Serial.print("Sensor chuva: ");
+      Serial.println(estaChovendo);
+
+      io->enviar(Sensores::Chuva, estaChovendo);
+
+      led->ligar();    
+    }
+
+    if ((sensor & Sensores::Luminosidade) == Sensores::Luminosidade) {
+      int luminosidade = sensorLuminosidade->ler();
+      Serial.print("Sensor luminosidade: ");
+      Serial.println(luminosidade);
+      
+      io->enviar(Sensores::Luminosidade, luminosidade);
+
+      led->ligar();  
+    }
+
+    if ((sensor & Sensores::Proximidade) == Sensores::Proximidade) {
+      int distancia = sensorProximidade->ler();
+      Serial.print("Sensor proximidade: ");
+      Serial.println(distancia);          
+      
+      io->enviar(Sensores::Proximidade, distancia);
+
+      led->ligar();  
+    }
+
+    if ((sensor & Sensores::Temperatura) == Sensores::Temperatura) {
+      float temperatura = sensorTemperatura->ler();
+      Serial.print("Sensor temperatura: ");
+      Serial.println(temperatura);      
+      
+      io->enviar(Sensores::Temperatura, temperatura);
+
+      led->ligar();  
+    }
+
+    if ((sensor & Sensores::UmidadeSolo) == Sensores::UmidadeSolo) {
+      int umidadeSolo = sensorUmidadeSolo->ler();
+      Serial.print("Sensor humidade solo: ");
+      Serial.println(umidadeSolo);      
+      
+      io->enviar(Sensores::UmidadeSolo, umidadeSolo);
+
+      led->ligar();  
+    }
   }
-
-  Serial.print("Sensor proximidade: ");
-  Serial.println(distancia);
-
-  int umidadeSolo = sensorUmidadeSolo->ler();
-  Serial.print("Sensor humidade solo: ");
-  Serial.println(umidadeSolo);
-
-  int estaChovendo = sensorChuva->ler();
-  Serial.print("Sensor chuva: ");
-  Serial.println(estaChovendo);
-
-  int luminosidade = sensorLuminosidade->ler();
-  Serial.print("Sensor luminosidade: ");
-  Serial.println(luminosidade);
-
-  float temperatura = sensorTemperatura->ler();
-  Serial.print("Sensor temperatura: ");
-  Serial.println(temperatura);
 
   delay(1000);
-}
-
-int receberDados() {
-  if (Serial.available()) {
-    return Serial.read();
-  }
-
-  return -1;
 }

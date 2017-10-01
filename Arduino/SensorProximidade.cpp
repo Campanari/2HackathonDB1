@@ -6,7 +6,7 @@ SensorProximidade::SensorProximidade(int triggerPort, int echoPort) {
     _echoPort = echoPort;
 }
 
-SensorProximidade::registrar() {
+void SensorProximidade::registrar() {
     _ultrasonic = new Ultrasonic(_triggerPort, _echoPort);
 }
 

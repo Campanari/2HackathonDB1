@@ -1,8 +1,8 @@
 class SensorChuva {
 public:
     SensorChuva(int port);
-    registrar();
-    int ler();
+    void registrar();
+    bool ler();
 
 private:
     int _port;

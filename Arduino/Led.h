@@ -1,9 +1,9 @@
 class Led {
     public:
         Led(int port);
-        registrar();
-        ligar();
-        desligar();
+        void registrar();
+        void ligar();
+        void desligar();
 
     private:
         int _port;

@@ -5,7 +5,7 @@ SensorLuminosidade::SensorLuminosidade(int port) {
     _port = port;
 }
 
-SensorLuminosidade::registrar() {
+void SensorLuminosidade::registrar() {
     pinMode(_port, INPUT);
 }
 

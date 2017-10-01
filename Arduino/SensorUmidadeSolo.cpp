@@ -6,7 +6,7 @@ SensorUmidadeSolo::SensorUmidadeSolo(int port, int switchPort) {
     _switchPort = switchPort;
 }
 
-SensorUmidadeSolo::registrar() {
+void SensorUmidadeSolo::registrar() {
     pinMode(_port, INPUT);
     pinMode(_switchPort, OUTPUT);
 

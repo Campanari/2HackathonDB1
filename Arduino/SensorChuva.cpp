@@ -5,10 +5,10 @@ SensorChuva::SensorChuva(int port) {
     _port = port;
 }
 
-SensorChuva::registrar() {
+void SensorChuva::registrar() {
     pinMode(_port, INPUT);
 }
 
-int SensorChuva::ler() {
-    return digitalRead(_port);
+bool SensorChuva::ler() {
+    return digitalRead(_port) > 0;
 }

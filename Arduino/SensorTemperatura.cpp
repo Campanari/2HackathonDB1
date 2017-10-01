@@ -6,7 +6,7 @@ SensorTemperatura::SensorTemperatura(int port) {
     _port = port;
 }
 
-SensorTemperatura::registrar() {
+void SensorTemperatura::registrar() {
     pinMode(_port, INPUT);
 
     _thermistor = new Thermistor(_port);

@@ -1,7 +1,7 @@
 class SensorUmidadeSolo {
 public:
     SensorUmidadeSolo(int port, int switchPort);
-    registrar();
+    void registrar();
     int ler();
 
 private:

@@ -1,7 +1,7 @@
 class SensorLuminosidade {
 public:
     SensorLuminosidade(int port);
-    registrar();
+    void registrar();
     int ler();
 
 private:

@@ -4,8 +4,10 @@
 class IO {
 public:
     IO(int inPort, int outPort);
-    registrar();
-    enviar(Sensores sensor,int dados);
+    void registrar();
+    bool disponivel();
+    void enviar(Sensores sensor, int dados);
+    void enviar(Sensores sensor, float dados);
     Sensores receber();
 
 private:

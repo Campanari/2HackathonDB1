@@ -3,7 +3,7 @@
 class SensorProximidade {
 public:
     SensorProximidade(int triggerPort, int echoPort);
-    registrar();
+    void registrar();
     int ler();
 
 private:
