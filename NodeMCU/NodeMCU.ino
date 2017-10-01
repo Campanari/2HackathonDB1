@@ -16,9 +16,9 @@ Broker* broker;
 
 void setup() 
 {
-  //Serial.begin(115200);
+  Serial.begin(115200);
   
-  wifi = new ModuloWiFi(SSID_, PASSWORD);
+  wifi = new ModuloWifi(SSID_, PASSWORD);
   broker = new Broker(BROKER_MQTT, BROKER_PORT);
 }
  

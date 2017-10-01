@@ -3,7 +3,7 @@
 class Broker {
   public:
     Broker(const char* mqtt, uint16_t port);
-    void connectar(const char* id, const char* topico);
+    void conectar(const char* id, const char* topico);
     bool conectado();
     void enviar(char* topico, char* dados);
     void receber();

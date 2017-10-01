@@ -14,7 +14,7 @@ Broker::Broker(const char* mqtt,uint16_t port) {
   _client->setCallback(mqtt_callback); 
 }
 
-void Broker::connectar(const char* id, const char* topico) {
+void Broker::conectar(const char* id, const char* topico) {
   while (!conectado()) {
       if (_client->connect(id)) {
           _client->subscribe(topico); 
