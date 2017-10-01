@@ -1,8 +1,6 @@
 #include "Broker.h"
 #include <ESP8266WiFi.h>
 
-void mqtt_callback(char* topic, byte* payload, unsigned int length);
-
 Broker::Broker(WiFiClient client, const char* mqtt,uint16_t port) {
   _mqtt = mqtt;
   _port = port;
@@ -13,7 +11,6 @@ Broker::Broker(WiFiClient client, const char* mqtt,uint16_t port) {
   Serial.println(_port);
 
   _client->setServer(_mqtt, _port);
-  _client->setCallback(mqtt_callback); 
 }
 
 void Broker::conectar(const char* id, const char* topico) {
@@ -53,26 +50,6 @@ void Broker::loop() {
   _client->loop();
 }
 
-void mqtt_callback(char* topic, byte* payload, unsigned int length) {
-  String msg;
-
-  //obtem a string do payload recebido
-  for(int i = 0; i < length; i++) 
-  {
-    char c = (char)payload[i];
-    msg += c;
-  }
-
-  if (msg.equals("L"))
-  {
-      //digitalWrite(D0, LOW);
-      //EstadoSaida = '1';
-  }
-
-  //verifica se deve colocar nivel alto de tensão na saída D0:
-  if (msg.equals("D"))
-  {
-      //digitalWrite(D0, HIGH);
-      //EstadoSaida = '0';
-  } 
+PubSubClient* Broker::getClient() {
+  return _client;
 }

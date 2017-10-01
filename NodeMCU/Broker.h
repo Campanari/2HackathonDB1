@@ -9,6 +9,7 @@ class Broker {
     void enviar(const char* topico, const char* dados);
     void receber();
     void loop();
+    PubSubClient* getClient();
 
   private:
     PubSubClient* _client;

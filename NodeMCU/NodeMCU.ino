@@ -12,6 +12,8 @@
 #define TOPICO_PUBLISH "AirdDUDV_P"
 #define ID_MQTT "AirdDUDV"
 
+void mqtt_callback(char* topic, byte* payload, unsigned int length);
+
 ModuloWifi* wifi;
 WiFiClient client;
 Broker broker(client, BROKER_MQTT, BROKER_PORT);
@@ -22,6 +24,8 @@ void setup()
 
   wifi = new ModuloWifi("DB1TALK", PASSWORD);
   wifi->conectar();
+
+  broker.getClient()->setCallback(mqtt_callback);
 }
 
 //Função: envia ao Broker o estado atual do output
@@ -60,4 +64,17 @@ void loop()
   broker.loop();
 
   delay(1000);
+}
+
+void mqtt_callback(char* topic, byte* payload, unsigned int length) {
+  String msg;
+
+  //obtem a string do payload recebido
+  for(int i = 0; i < length; i++) 
+  {
+    char c = (char)payload[i];
+    msg += c;
+  }
+
+  Serial.println(msg);
 }
